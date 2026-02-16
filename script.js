@@ -9,7 +9,7 @@ const todos = saved ? JSON.parse(saved) : [];
 
 function saveTodos() {
     // save current todo array to localstorage 
-    localStorage.getItem(JSON.stringify(todos))
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 // create a dom node for a todo oject and append it to the list
@@ -20,7 +20,7 @@ function createtodonode(todo, index) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = !!todo.completed;
-    checkbox.addEventListener ("change", () => {
+    checkbox.addEventListener("change", () => {
         todo.completed = checkbox.checked;
 
         // visual : strike through
@@ -31,11 +31,17 @@ function createtodonode(todo, index) {
     // text of the todo
     const textSpan = document.createElement("span");
     textSpan.textContent = todo.text;
+
+    const dateSpan = document.createElement("small");
+    dateSpan.textContent = todo.createdAt;
+    dateSpan.style.marginLeft = "8px";
+    dateSpan.style.color = "gray";
+
     textSpan.style.margin = "0 8px";
 
     if (todo.completed) {
         textSpan.style.textDecoration = "line-through"
-     }
+    }
 
     // add double-click event listner to edit todo
     document.addEventListener("dblclick", () => {
@@ -54,9 +60,10 @@ function createtodonode(todo, index) {
         render();
         saveTodos();
     })
-    
+
     li.appendChild(checkbox);
     li.appendChild(textSpan);
+    li.appendChild(dateSpan);
     li.appendChild(delBtn);
     return li;
 }
@@ -78,7 +85,12 @@ function addTodo() {
         return;
     }
     //  push a new todo object
-    todos.push({ text, completed:false});
+    todos.push({
+        text,
+        completed: false,
+        createdAt: new Date().toLocaleString()
+    });
+
     input.value = "";
     render();
     saveTodos();
