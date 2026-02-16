@@ -40,18 +40,22 @@ function createtodonode(todo, index) {
 
     textSpan.style.margin = "0 8px";
 
-    if (todo.completed) {
-        textSpan.style.textDecoration = "line-through"
-    }
+    if (todo.completed)
+     {
+        todo.completed = true;
+        render();
+     }
 
     // add double-click event listner to edit todo
-    document.addEventListener("dblclick", () => {
-        const newText = prompt("Edit todo", todo.text);
-        if (todo !== null)
-            todo.text = newText.trim()
-        textSpan.textContent = todo.text;
+   textSpan.addEventListener("dblclick", () => {
+    const newText = prompt("Edit todo", todo.text);
+    if (newText !== null && newText.trim() !== "") {
+        todo.text = newText.trim();
         saveTodos();
-    })
+        render();  
+    }
+    });
+
 
     // delete todo button
     const delBtn = document.createElement("button");
