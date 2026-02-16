@@ -20,14 +20,12 @@ function createtodonode(todo, index) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = !!todo.completed;
+
     checkbox.addEventListener("change", () => {
         todo.completed = checkbox.checked;
-        
-        // visual : strike through
-        textSpan.style.textDecoration = todo.completed ? "line-through" : "none";
         saveTodos();
         render();
-    })
+    });
 
     // text of the todo
     const textSpan = document.createElement("span");
@@ -37,23 +35,21 @@ function createtodonode(todo, index) {
     dateSpan.textContent = todo.createdAt;
     dateSpan.style.marginLeft = "8px";
     dateSpan.style.color = "gray";
-
     textSpan.style.margin = "0 8px";
 
-    if (todo.completed)
-     {
-        todo.completed = true;
-        render();
-     }
+    if (todo.completed) {
+        textSpan.classList.add("completed");
+    }
+
 
     // add double-click event listner to edit todo
-   textSpan.addEventListener("dblclick", () => {
-    const newText = prompt("Edit todo", todo.text);
-    if (newText !== null && newText.trim() !== "") {
-        todo.text = newText.trim();
-        saveTodos();
-        render();  
-    }
+    textSpan.addEventListener("dblclick", () => {
+        const newText = prompt("Edit todo", todo.text);
+        if (newText !== null && newText.trim() !== "") {
+            todo.text = newText.trim();
+            saveTodos();
+            render();
+        }
     });
 
 
@@ -78,10 +74,11 @@ function render() {
     list.innerHTML = '';
 
     // recreate each item
-    todos.forEach((todos, index) => {
-        const node = createtodonode(todos, index)
+    todos.forEach((todo, index) => {
+        const node = createtodonode(todo, index);
         list.appendChild(node);
     });
+
 }
 
 function addTodo() {
@@ -93,7 +90,7 @@ function addTodo() {
     todos.push({
         text,
         completed: false,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().toLocaleString("en-US")
     });
 
     input.value = "";
