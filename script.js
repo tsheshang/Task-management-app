@@ -22,10 +22,11 @@ function createtodonode(todo, index) {
     checkbox.checked = !!todo.completed;
     checkbox.addEventListener("change", () => {
         todo.completed = checkbox.checked;
-
+        
         // visual : strike through
         textSpan.style.textDecoration = todo.completed ? "line-through" : "none";
         saveTodos();
+        render();
     })
 
     // text of the todo
