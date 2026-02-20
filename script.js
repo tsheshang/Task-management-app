@@ -7,6 +7,8 @@ const list = document.getElementById('todo-list');
 const saved = localStorage.getItem("todos");
 const todos = saved ? JSON.parse(saved) : [];
 
+
+
 // Save todos to localStorage
 function saveTodos() {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -57,6 +59,19 @@ function createtodonode(todo, index) {
             }
         }
     );
+    // edit button added
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.classList.add("edit-btn");
+
+    editBtn.addEventListener("click", function () {
+        const newText = prompt("Edit todo", todo.text);
+        if (newText !== null && newText.trim() !== "") {
+            todo.text = newText.trim();
+            saveTodos();
+            render();
+        }
+    });
 
     // Delete button
     const delBtn = document.createElement("button");
@@ -72,6 +87,7 @@ function createtodonode(todo, index) {
 
     li.appendChild(checkbox);
     li.appendChild(textSpan);
+    li.appendChild(editBtn);
     li.appendChild(dateSpan);
     li.appendChild(delBtn);
 
@@ -93,15 +109,6 @@ function addTodo() {
     const text = input.value.trim();
     if (!text) return;
 
-    input.addEventListener(
-        "keydown",
-        function (event) {
-            if (event.key === "Enter") {
-                addTodo();
-            }
-        }
-    );
-
     todos.push({
         text: text,
         completed: false,
@@ -112,6 +119,13 @@ function addTodo() {
     render();
     saveTodos();
 }
+input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        addTodo();
+    }
+});
 
+// Click button
 button.addEventListener("click", addTodo);
+
 render();
